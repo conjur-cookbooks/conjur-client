@@ -22,5 +22,5 @@
 begin
   include_recipe "conjur-client::#{node['platform_family']}"
 rescue Chef::Exceptions::RecipeNotFound
-  Chef::Log.warn "A build-essential recipe does not exist for the platform_family: #{node['platform_family']}"
+  Chef::Log.warn "A conjur-client recipe does not exist for the platform_family: #{node['platform_family']}"
 end
