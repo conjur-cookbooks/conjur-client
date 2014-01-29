@@ -33,7 +33,7 @@ file "/opt/conjur/embedded/ssl/certs/conjur.pem" do
 end
 
 execute "c_rehash #{openssl_certs_dir}"
-execute "c_rehash /opt/conjur/embedded/ssl/certs/"
+execute "c_rehash /opt/conjur/embedded/ssl/certs"
 
 embedded_cert = "/opt/conjur/embedded/ssl/cert.pem"
 ruby_block "append conjur.pem to #{embedded_cert}" do
