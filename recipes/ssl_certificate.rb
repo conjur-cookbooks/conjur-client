@@ -27,7 +27,13 @@ file File.join(openssl_certs_dir, 'conjur.pem') do
   mode "0644"
 end
 
+file "/opt/conjur/embedded/ssl/certs/conjur.pem" do
+  content certificate
+  mode "0644"
+end
+
 execute "c_rehash #{openssl_certs_dir}"
+execute "c_rehash /opt/conjur/embedded/ssl/certs/"
 
 embedded_cert = "/opt/conjur/embedded/ssl/cert.pem"
 ruby_block "append conjur.pem to #{embedded_cert}" do
