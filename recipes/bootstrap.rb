@@ -19,13 +19,25 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-conjurrc = {
-  "account" => node.conjur.configuration.account,
-  "plugins" => node.conjur.configuration['plugins'] || [ 'environment', 'key-pair', 'layer', 'pubkeys' ]
-}
-conjurrc["appliance_url"] = node.conjur.configuration.appliance_url if node.conjur.configuration['appliance_url']
-conjurrc["stack"] = node.conjur.configuration.stack if node.conjur.configuration['stack']
+include_recipe "build-essential"
 
-file "/etc/conjur.conf" do
-  content YAML.dump(conjurrc)
+gem_package 'aws-sdk' do
+  gem_binary "/opt/conjur/embedded/bin/gem"
+end
+
+directory "/etc/chef"
+
+cookbook_file '/usr/local/bin/conjur-bootstrap-configure' do
+  source 'conjur-bootstrap-configure'
+  mode '0755'
+end
+
+file '/etc/conjur-bootstrap-bucket' do
+  content node.conjur['bootstrap-bucket'] || "conjur-#{node.conjur.configuration.account}-bootstrap"
+  mode '0644'
+end
+
+cookbook_file '/etc/init/conjur-bootstrap.conf' do
+  source 'conjur-bootstrap.conf'
+  mode '0644'
 end

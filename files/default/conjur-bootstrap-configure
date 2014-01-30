@@ -1,0 +1,17 @@
+#!/opt/conjur/embedded/bin/ruby
+require 'json'
+require 'open-uri'
+require 'aws-sdk'
+s3 = AWS::S3.new()
+bucket_name = File.read('/etc/conjur-bootstrap-bucket')
+begin
+  role_name = URI.parse("http://169.254.169.254/latest/meta-data/iam/security-credentials").read
+rescue OpenURI::HTTPError
+  $stderr.puts "http://169.254.169.254/latest/meta-data/iam/security-credentials returned #{$!.message}"
+  exit 1
+end
+obj_name = "#{role_name}.json"
+$stderr.puts "Writing #{bucket_name}/#{obj_name} to /etc/chef/solo.json"
+json = JSON.parse s3.buckets[bucket_name].objects[obj_name].read
+File.write '/etc/chef/solo.json', JSON.pretty_generate(json)
+File.chmod 0600, '/etc/chef/solo.json'
