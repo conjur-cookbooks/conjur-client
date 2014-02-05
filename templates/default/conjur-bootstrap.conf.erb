@@ -1,0 +1,8 @@
+description "Bootstrap Conjur from Chef attributes and cookbook"
+
+start on <%= @start_event %>
+
+script
+  /usr/local/bin/conjur-bootstrap-configure > /var/log/conjur-bootstrap.log 2>&1
+  chef-solo -j /etc/chef/solo.json -o "terminal-login::configure" >> /var/log/conjur-bootstrap.log 2>&1
+end script

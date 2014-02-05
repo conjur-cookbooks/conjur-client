@@ -37,7 +37,16 @@ file '/etc/conjur-bootstrap-bucket' do
   mode '0644'
 end
 
-cookbook_file '/etc/init/conjur-bootstrap.conf' do
-  source 'conjur-bootstrap.conf'
+start_event = case node['platform_family']
+when 'rhel'
+  # rhel doesn't seem to support any type of useful startup events like filesystem and network
+  "started sshd"
+else
+  "(local-filesystems and net-device-up IFACE!=lo)"
+end
+
+template '/etc/init/conjur-bootstrap.conf' do
+  source 'conjur-bootstrap.conf.erb'
+  variables start_event: start_event
   mode '0644'
 end

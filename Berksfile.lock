@@ -1,0 +1,7 @@
+{
+  "sources": {
+    "build-essential": {
+      "locked_version": "1.4.2"
+    }
+  }
+}
