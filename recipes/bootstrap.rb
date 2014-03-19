@@ -33,7 +33,7 @@ cookbook_file '/usr/local/bin/conjur-bootstrap-configure' do
 end
 
 file '/etc/conjur-bootstrap-bucket' do
-  content node.conjur['bootstrap-bucket'] || "conjur-#{node.conjur.configuration.account}-bootstrap"
+  content Conjur::Chef::Client.conjur_bootstrap_bucket(node)
   mode '0644'
 end
 

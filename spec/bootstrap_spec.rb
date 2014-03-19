@@ -1,6 +1,16 @@
 require 'spec_helper'
 
 describe 'conjur-client::bootstrap' do
+  # http://stackoverflow.com/questions/625644/find-out-the-instance-id-from-within-an-ec2-machine/21944204#21944204
+  let(:instance_document) {
+    {
+      "accountId" => "12345678"
+    }
+  }
+  before {
+    require 'uri'
+    URI.should_receive(:parse).with("http://169.254.169.254/latest/dynamic/instance-identity/document").and_return double("instance-document", read: instance_document.to_json)
+  }
   let(:conjurrc) {
     {
       "account" => 'the-account'
@@ -18,7 +28,7 @@ describe 'conjur-client::bootstrap' do
   end
   it 'creates /etc/conjur-bootstrap-bucket' do
     chef_run.should create_file('/etc/conjur-bootstrap-bucket').with(
-      content: "conjur-the-account-bootstrap",
+      content: "conjur-12345678-bootstrap",
       mode: '0644'
     )
   end
