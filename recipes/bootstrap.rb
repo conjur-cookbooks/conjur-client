@@ -28,7 +28,9 @@ gem_package 'aws-sdk' do
 end
 
 # Will contain the bootstrap attributes and run-list.
-directory "/opt/conjur/etc/chef"
+directory "/opt/conjur/etc/chef" do
+  recursive true
+end
 
 # Run on startup by the upstart job below, it finds out the bucket name,
 # and transfers the bootstrap attributes to /opt/conjur/etc/chef.
