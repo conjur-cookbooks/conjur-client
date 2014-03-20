@@ -4,6 +4,7 @@ describe 'conjur-client::default' do
   let :chef_run do
     ChefSpec::Runner.new(platform: platform, version: version) do |node|
       node.set['platform_family'] = platform_family if platform_family
+      node.set['conjur']['version'] = '4.5.1-0'
     end.converge described_recipe
   end
 

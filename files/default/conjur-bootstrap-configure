@@ -2,6 +2,7 @@
 require 'json'
 require 'open-uri'
 require 'aws-sdk'
+
 s3 = AWS::S3.new()
 bucket_name = File.read('/etc/conjur-bootstrap-bucket')
 begin
@@ -11,7 +12,7 @@ rescue OpenURI::HTTPError
   exit 1
 end
 obj_name = "#{role_name}.json"
-$stderr.puts "Writing #{bucket_name}/#{obj_name} to /etc/chef/solo.json"
+$stderr.puts "Writing #{bucket_name}/#{obj_name} to /opt/conjur/etc/chef/bootstrap.json"
 json = JSON.parse s3.buckets[bucket_name].objects[obj_name].read
-File.write '/etc/chef/solo.json', JSON.pretty_generate(json)
-File.chmod 0600, '/etc/chef/solo.json'
+File.write '/opt/conjur/etc/chef/bootstrap.json', JSON.pretty_generate(json)
+File.chmod 0600, '/opt/conjur/etc/chef/bootstrap.json'

@@ -4,5 +4,5 @@ start on <%= @start_event %>
 
 script
   /usr/local/bin/conjur-bootstrap-configure > /var/log/conjur-bootstrap.log 2>&1
-  chef-solo -j /etc/chef/solo.json >> /var/log/conjur-bootstrap.log 2>&1
+  chef-solo -j /opt/conjur/etc/chef/bootstrap.json >> /var/log/conjur-bootstrap.log 2>&1
 end script

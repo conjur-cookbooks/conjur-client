@@ -19,7 +19,7 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-openssl_certs_dir = File.join(ConjurCLI.openssl_dir, 'certs')
+openssl_certs_dir = File.join(Conjur::Chef::Client.openssl_dir, 'certs')
 certificate = node.conjur.ssl_certificate
 
 file File.join(openssl_certs_dir, 'conjur.pem') do
