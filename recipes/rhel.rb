@@ -19,9 +19,6 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-# Install c_rehash
-package "openssl-perl"
-
 file_name = "conjur-#{node.conjur.version}.rpm"
 target_path = File.join(Chef::Config[:file_cache_path], file_name)
 

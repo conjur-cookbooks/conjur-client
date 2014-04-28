@@ -19,6 +19,11 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
+# Install c_rehash
+if node['platform_family'] == "rhel"
+  package "openssl-perl"
+end
+
 openssl_certs_dir = File.join(Conjur::Chef::Client.openssl_dir, 'certs')
 certificate = node.conjur.ssl_certificate
 
@@ -34,17 +39,3 @@ end
 
 execute "c_rehash #{openssl_certs_dir}"
 execute "c_rehash /opt/conjur/embedded/ssl/certs"
-
-embedded_cert = "/opt/conjur/embedded/ssl/cert.pem"
-ruby_block "append conjur.pem to #{embedded_cert}" do
-  block do
-    content = File.read(embedded_cert)
-    header = <<-HEADER
-
-Conjur
-======
-    HEADER
-    File.write(embedded_cert, [ content, header, certificate ].join("\n"))
-  end
-  not_if { File.read(embedded_cert).index(certificate) }
-end

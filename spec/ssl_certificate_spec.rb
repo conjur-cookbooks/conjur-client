@@ -4,14 +4,25 @@ describe 'conjur-client::ssl_certificate' do
   let :chef_run do
     ChefSpec::Runner.new do |node|
       node.set['conjur']['ssl_certificate'] = 'the-certificate'
-    end.converge described_recipe
+    end
+  end
+  let :subject do
+    chef_run.converge(described_recipe)
   end
 
-  it "creates conjur.pem" do
-    expect(chef_run).to create_file('/opt/conjur/embedded/ssl/certs/conjur.pem').with(content: 'the-certificate')
-    expect(chef_run).to create_file(File.join(Conjur::Chef::Client.openssl_dir, 'certs/conjur.pem')).with(content: 'the-certificate')
-    expect(chef_run).to run_execute("c_rehash #{File.join(Conjur::Chef::Client.openssl_dir, 'certs')}")
-    expect(chef_run).to run_execute("c_rehash /opt/conjur/embedded/ssl/certs")
-    expect(chef_run).to run_ruby_block("append conjur.pem to /opt/conjur/embedded/ssl/cert.pem")
+  context "default" do
+    it "creates conjur.pem" do
+      expect(subject).not_to install_package('openssl-perl')
+      expect(subject).to create_file('/opt/conjur/embedded/ssl/certs/conjur.pem').with(content: 'the-certificate')
+      expect(subject).to create_file(File.join(Conjur::Chef::Client.openssl_dir, 'certs/conjur.pem')).with(content: 'the-certificate')
+      expect(subject).to run_execute("c_rehash #{File.join(Conjur::Chef::Client.openssl_dir, 'certs')}")
+      expect(subject).to run_execute("c_rehash /opt/conjur/embedded/ssl/certs")
+    end
+  end
+  context "rhel" do
+    it "creates conjur.pem" do
+      chef_run.node.automatic['platform_family'] = 'rhel'
+      expect(subject).to install_package('openssl-perl')
+    end
   end
 end
