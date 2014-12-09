@@ -28,6 +28,6 @@ rpm_package "conjur" do
 end
 
 remote_file target_path do
-  source "https://s3.amazonaws.com/conjur-client-packages/conjur-#{node.conjur.version}.x86_64.rpm"
+  source "https://s3.amazonaws.com/conjur-releases/omnibus/conjur-#{node.conjur.version}.x86_64.rpm"
   notifies :install, "rpm_package[conjur]", :immediately
 end

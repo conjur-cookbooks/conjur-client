@@ -28,6 +28,6 @@ dpkg_package "conjur" do
 end
 
 remote_file target_path do
-  source "https://s3.amazonaws.com/conjur-client-packages/conjur_#{node.conjur.version}_amd64.deb"
+  source "https://s3.amazonaws.com/conjur-releases/omnibus/conjur_#{node.conjur.version}_amd64.deb"
   notifies :install, "dpkg_package[conjur]", :immediately
 end
