@@ -3,7 +3,7 @@ maintainer        'Conjur, Inc.'
 maintainer_email  'kgilpin@conjur.net'
 license           'MIT'
 description       'Installs the Conjur command line interface'
-version           '0.3.0'
+version           '0.3.1'
 
 recipe "conjur-client::bootstrap", "Installs an upstart script which will fetch solo.json from an S3 bucket and run chef-solo"
 recipe "conjur-client::conjurrc", "Creates /etc/conjur.conf"
